@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 import os
 import math
 import csv
@@ -70,17 +71,24 @@ learning_rate = 100  # 学习率
 iter_time = 10000  # 迭代次数
 adagrad = np.zeros([dim, 1])  # 生成dim行即163行1列的数组，用来使用adagrad算法更新学习率
 eps = 0.0000000001  # 因为新的学习率是learning_rate/sqrt(sum_of_pre_grads**2),而adagrad=sum_of_grads**2,所以处在分母上而迭代时adagrad可能为0，所以加上一个极小数，使其不除0
+costs=[]
 for t in range(iter_time):
     #np.dot向量点积和矩阵乘法
     loss = np.sqrt(np.sum(np.power(np.dot(x, w) - y,
                                    2)) / 471 / 12)  # rmse loss函数是从0-n的(X*W-Y)**2之和/(471*12)再开根号，即使用均方根误差(root mean square error),具体可百度其公式，/471/12即/N(次数)
     if (t % 100 == 0):  # 每一百次迭代就输出其损失
+        costs.append(loss)
         print('after {} epochs, the loss on train data is'.format(t),loss)
         # print(str(t) + ":" + str(loss))
     gradient = 2 * np.dot(x.transpose(), np.dot(x,
                                                 w) - y)  # dim*1 x.transpose即x的转置，后面是X*W-Y,即2*(x的转置*(X*W-Y))是梯度，具体可由h(x)求偏微分获得.最后生成1行18*9+1列的数组。转置后的X，其每一行是一个参数，与h(x)-y的值相乘之后是参数W0的修正值，同理可得W0-Wn的修正值保存到1行18*9+1列的数组中，即gradient
     adagrad += gradient ** 2  # adagrad用于保存前面使用到的所有gradient的平方，进而在更新时用于调整学习率
     w = w - learning_rate * gradient / np.sqrt(adagrad + eps)  # 更新权重
+plt.plot(np.squeeze(costs))
+plt.ylabel('cost')
+plt.xlabel('iterations (per tens)')
+plt.title("AdaGrad")
+plt.show()
 np.save('weight.npy', w)  # 将参数保存下来
 
 
