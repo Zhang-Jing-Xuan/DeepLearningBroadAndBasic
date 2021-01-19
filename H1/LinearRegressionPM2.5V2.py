@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import os
 import math
 import csv
+
 os.chdir("/Users/admin/Desktop/CL/Python/DeapLeaning/H1")
 
 '''
@@ -97,7 +98,7 @@ for t in range(iter_time):
     loss = np.sqrt(np.sum(np.power(np.dot(x, w) - y,2)) / 471 / 12)  
     if (t % 100 == 0): 
         costs.append(loss)
-        print('after {} epochs, the loss on train data is'.format(t),loss)
+        print('After {} epochs, the loss on train data is'.format(t),loss)
     gradient = 2 * np.dot(x.transpose(), np.dot(x,w) - y) 
     adagrad += gradient ** 2 
     w = w - learning_rate * gradient / np.sqrt(adagrad + eps)
@@ -119,7 +120,7 @@ w = np.load('weight.npy')
 x_validation = np.concatenate((np.ones([1131, 1]), x_validation), axis=1).astype(float)
 ans_y = np.dot(x_validation, w)
 loss = np.sqrt(np.sum(np.power(ans_y - y_validation, 2)) / 1131)
-print(loss)
+print("The loss on validation data is",loss)
 
 '''预测testdata得到预测结果
 1.取csv文件中的全行数即第3列到结束的列数所包含的数据保存到test_data
@@ -128,6 +129,7 @@ print(loss)
 4.创建一个240行18*9列的空数列保存testdata的输入
 5.跟training data是同一种方法进行Normalize
 6.在test_x前面拼接一列全1数组，构成240行，163列数据
+7.加载之前算得得参数进行预测
 '''
 testdata = pd.read_csv('test.csv', header=None)
 test_data = testdata.iloc[:, 2:]  
@@ -141,8 +143,6 @@ for i in range(len(test_x)):
         if std_x[j] != 0:
             test_x[i][j] = (test_x[i][j] - mean_x[j]) / std_x[j]
 test_x = np.concatenate((np.ones([240, 1]), test_x), axis=1).astype(float) 
-
-#进行预测
 w = np.load('weight.npy')
 ans_y = np.dot(test_x, w)
 
