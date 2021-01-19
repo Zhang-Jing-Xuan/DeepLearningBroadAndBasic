@@ -23,7 +23,7 @@ raw_data = data.to_numpy()
 month_data[i]=[a][b],i代表第i个月(0~11),[a][b]代表24*12个小时的18个属性
 先遍历12个月，对每个月分别计算
 sample：临时数组，存储每个月的24*12个小时的18个属性信息
-再遍历20天，计算sample数组：raw_data每次一次性将18行的数据赋值给sample的24列中
+再遍历20天，计算sample数组：raw_data每次一次性将18行（24列）的数据赋值给sample的24列（18行）中，重复20次
 '''
 month_data = {}
 for month in range(12): 
@@ -34,13 +34,13 @@ for month in range(12):
 
 '''
 特征提取2:计算x,y
-x:一个月一共480个小时，0～9算第0个数据，480为第471个数据（一个月的最后一个数组）
+x:一个月一共480个小时，0～9算第0个数据，480为第471个数据（一个月的最后一个数据),数据类型为float
 x.shape=(12 * 471, 18 * 9)
-y：对应与每一个x的PM2.5浓度
+y：对应与每一个x的PM2.5浓度，数据类型为float
 y.shape=(12 * 471, 1)
 依次遍历月（0-11），日（0-19），小时（0-23）
 每个月最后一天的小时数据为23-9=14
-每次一次性取9个月数据并将整个数据reshape成一行数据赋值给x，
+每次一次性取9列数据并将整个数据reshape成一行数据赋值给x，
 每次取第9行的那个数据赋值给y
 '''
 x = np.empty([12 * 471, 18 * 9],dtype=float)  
@@ -57,8 +57,8 @@ for month in range(12):
 归一化
 np.mean(x, axis=0):求均值，axis = 0表示对各列求均值，返回 1* 列数 的矩阵
 np.std(x, axis=0):求标准差，axis = 0表示对各列求标准差，返回 1* 列数 的矩阵
-len(x)=x第一维大小=12 * 471
-len(x[0])=x第二维大小=18 * 9
+len(x)= x第一维大小 =12 * 471
+len(x[0])= x第二维大小 =18 * 9
 '''
 mean_x = np.mean(x, axis=0)  
 std_x = np.std(x, axis=0) 
@@ -67,7 +67,7 @@ for i in range(len(x)):
         if std_x[j] != 0:
             x[i][j] = (x[i][j] - mean_x[j]) / std_x[j]
 
-#训练集和验证集
+#训练集和验证集，八二分
 x_train_set = x[: math.floor(len(x) * 0.8), :]
 y_train_set = y[: math.floor(len(y) * 0.8), :]
 x_validation = x[math.floor(len(x) * 0.8):, :]
@@ -77,12 +77,12 @@ y_validation = y[math.floor(len(y) * 0.8):, :]
 模型训练:
 dim:用来做参数vector的维数，加1是为了对bias好处理（还有个误差项）。即最后的h(x)=w1x1+w2x2+...+WnXn+b
 np.ones([dim, 1]):生成一个dim行1列的数组用来保存参数值，对比源码我这里改成了ones而不是zeros
-np.ones来生成12*471行1列的全1数组，np.concatenate，axis=1表示按列将两个数组拼接起来，即在x最前面新加一列内容，之前x是12*471行18*9列的数组，新加一列之后变为12*471行18*9+1列的数组
+np.ones([12 * 471, 1])来生成12*471行1列的全1数组，np.concatenate，axis=1表示按列将两个数组拼接起来，即在x最前面新加一列内容，之前x是12*471行18*9列的数组，新加一列之后变为12*471行18*9+1列的数组
 学习率=100,迭代次数=10000
 adagrad:生成dim行即163行1列的数组，用来使用adagrad算法更新学习率
-eps:因为新的学习率是learning_rate/sqrt(sum_of_pre_grads**2),而adagrad=sum_of_grads**2,所以处在分母上而迭代时adagrad可能为0，所以加上一个极小数，使其不除0
+eps:因为新的学习率是learning_rate/sqrt(sum_of_pre_grads**2),而adagrad=sum_of_grads**2,所以处在分母上而迭代时adagrad可能为0，所以加上一个极小数，使其不除0（1e-10）
 np.dot向量点积和矩阵乘法
-gradient: dim*1 转置后的X，其每一行是一个参数，与h(x)-y的值相乘之后是参数W0的修正值，同理可得W0-Wn的修正值保存到1行18*9+1列的数组中，即gradient
+gradient: 通过矩阵求导算得
 adagrad: 累计gradient的平方和
 '''
 dim = 18 * 9 + 1  
@@ -125,7 +125,7 @@ print(loss)
 1.取csv文件中的全行数即第3列到结束的列数所包含的数据保存到test_data
 2.将testdata中的NR替换为0
 3.将其转换为数组,数据类型为浮点格式
-4.创建一个240行18*9列的空数列用于保存testdata的输入
+4.创建一个240行18*9列的空数列保存testdata的输入
 5.跟training data是同一种方法进行Normalize
 6.在test_x前面拼接一列全1数组，构成240行，163列数据
 '''
