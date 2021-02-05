@@ -25,5 +25,8 @@
 ## H5 
 ### 李宏毅第五次作业：分别使用Saliency map，Filter explaination，Lime对CNN模型进行解释
 
+## H9 （降维与聚类）
+### 李宏毅第九次作业：手写AutoEncoder，调用PCA,t-SNE对数据进行降维，然后使用k-means对图片进行聚类
+
 ## Framework 
 ### 深度学习框架的学习：包括PyTorch，TensorFlow
