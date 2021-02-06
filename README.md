@@ -29,7 +29,7 @@
 ### 李宏毅第九次作业：手写AutoEncoder，调用PCA,t-SNE对数据进行降维，然后使用k-means对图片进行聚类
 
 ## H9 （异常侦测）
-### 李宏毅第十次作业：使用K-means,PCA,AutoEncoder进行异常侦测————让机器知道自己不知道
+### 李宏毅第十次作业：使用K-means,PCA,AutoEncoder进行异常侦测——让机器知道自己不知道
 
 ## Framework 
 ### 深度学习框架的学习：包括PyTorch，TensorFlow
