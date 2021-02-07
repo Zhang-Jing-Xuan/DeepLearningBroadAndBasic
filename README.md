@@ -32,7 +32,7 @@
 ### 李宏毅第十次作业：使用K-means,PCA,AutoEncoder进行异常侦测——让机器输出自己是否在training data上看到类似主题的图片
 
 ## H11(GAN)
-### 李宏毅第十一次作业：使用GAN生成若干张二次元图片
+### 李宏毅第十一次作业：使用DCGAN生成若干张二次元图片
 
 ## Framework 
 ### 深度学习框架的学习：包括PyTorch，TensorFlow
