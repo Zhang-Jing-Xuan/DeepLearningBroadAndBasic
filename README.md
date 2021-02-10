@@ -36,3 +36,6 @@
 
 ## Framework 
 ### 深度学习框架的学习：包括PyTorch，TensorFlow
+
+## LeNet_CIFAR10 
+### 使用LeNet卷积神经网络在CIFAR10数据集上训练
