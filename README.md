@@ -39,3 +39,6 @@
 
 ## LeNet_CIFAR10 
 ### 使用LeNet卷积神经网络在CIFAR10数据集上训练
+
+## ResNeXt_Flowers
+### 使用ResNeXt卷积神经网络在花分类数据集上训练
